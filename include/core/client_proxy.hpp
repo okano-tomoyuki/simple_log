@@ -15,7 +15,66 @@ class Client;
 class ClientProxy
 {
 public:
-    ClientProxy(const Client &c, LogLevel lvl);
+    ClientProxy(const Client& c);
+
+    ClientProxy& sep(std::string s)
+    {
+        msg_.separator = s;
+        return *this;
+    }
+
+    ClientProxy& fmt(const FormatRules& f)
+    {
+        rules_ = f;
+        return *this;
+    }
+
+    ClientProxy& fmt(const std::string& f)
+    {
+        rules_ = FormatRules();
+        return *this;
+    }
+
+    template<typename... Args>
+    void info(const Args&... args)
+    {
+        msg_.level = LogLevel::INFO;
+        append(args...);
+        commit();
+    }
+
+    template<typename... Args>
+    void debug(const Args&... args)
+    {
+        msg_.level = LogLevel::DEBUG;
+        append(args...);
+        commit();
+    }
+
+    template<typename... Args>
+    void warn(const Args&... args)
+    {
+        msg_.level = LogLevel::WARN;
+        append(args...);
+        commit();
+    }
+
+    template<typename... Args>
+    void error(const Args&... args)
+    {
+        msg_.level = LogLevel::ERROR;
+        append(args...);
+        commit();
+    }
+
+    ClientProxy& append();
+
+private:
+    const Client &client_;
+    Message msg_;
+    FormatRules rules_;
+
+    bool commit();
 
     template <typename T, typename... Remain>
     ClientProxy& append(const T &value, const Remain &...remain)
@@ -23,19 +82,6 @@ public:
         append_one(value);
         return append(remain...);
     }
-
-    ClientProxy& append();
-
-    void set_separator(const std::string& s);
-    
-    void set_format(const FormatRules& f);
-
-    bool commit();
-
-private:
-    const Client &client_;
-    Message msg_;
-    FormatRules rules_;
 
     template <typename T>
     typename std::enable_if<!std::is_integral<T>::value && !std::is_floating_point<T>::value && !std::is_pointer<T>::value, ClientProxy&>::type
@@ -117,8 +163,6 @@ private:
         msg_.tokens.push_back(std::move(t));
         return *this;
     }
-
-
 };
 
 } // namespace SimpleLog

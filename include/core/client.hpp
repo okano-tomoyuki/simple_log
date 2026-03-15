@@ -7,9 +7,7 @@
 #include "core/hash.hpp"
 #include "core/server.hpp"
 #include "core/message.hpp"
-#include "core/client/decorator.hpp"
-#include "core/client/decorator/separator_decorator.hpp"
-#include "core/client/decorator/format_decorator.hpp"
+#include "core/client_proxy.hpp"
 
 namespace SimpleLog
 {
@@ -42,44 +40,36 @@ public:
     
     const FormatRules& default_fmt() const;
 
-    SeparatorDecorator sep(const std::string& s) const;
+    ClientProxy sep(const std::string& s) const;
 
-    FormatDecorator fmt(const std::string& f) const;
+    ClientProxy fmt(const std::string& f) const;
 
-    FormatDecorator fmt(const FormatRules& rules) const;
+    ClientProxy fmt(const FormatRules& rules) const;
 
     bool push(Message&& msg) const;
 
     template<typename... Args>
     void info(const Args&... args) const 
     {
-        ClientProxy p(*this, LogLevel::INFO);
-        p.append(args...);
-        p.commit();
+        ClientProxy(*this).info(args...);
     }
 
     template<typename... Args>
     void debug(const Args&... args) const 
     {
-        ClientProxy p(*this, LogLevel::DEBUG);
-        p.append(args...);
-        p.commit();
+        ClientProxy(*this).debug(args...);
     }
 
     template<typename... Args>
     void warn(const Args&... args) const 
     {
-        ClientProxy p(*this, LogLevel::WARN);
-        p.append(args...);
-        p.commit();
+        ClientProxy(*this).warn(args...);
     }
 
     template<typename... Args>
     void error(const Args&... args) const 
     {
-        ClientProxy p(*this, LogLevel::ERROR);
-        p.append(args...);
-        p.commit();
+        ClientProxy(*this).error(args...);
     }
 
 private:

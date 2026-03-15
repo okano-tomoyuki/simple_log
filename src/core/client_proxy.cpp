@@ -1,31 +1,21 @@
 #include <string>
 #include <chrono>
 #include "core/message.hpp"
+#include "core/client_proxy.hpp"
 #include "core/client.hpp"
 
 using namespace SimpleLog;
 
-ClientProxy::ClientProxy(const Client &c, LogLevel lvl)
+ClientProxy::ClientProxy(const Client &c)
     : client_(c)
 {
-    msg_.level = lvl;
     msg_.tags = c.tags();
     msg_.tag_hashes = c.tag_hashes();
 }
 
-ClientProxy& ClientProxy::append() 
+ClientProxy& ClientProxy::append()
 { 
-    return *this; 
-}
-
-void ClientProxy::set_separator(const std::string &s) 
-{ 
-    msg_.separator = s; 
-}
-
-void ClientProxy::set_format(const FormatRules& f) 
-{ 
-    rules_ = f;
+    return *this;
 }
 
 bool ClientProxy::commit()

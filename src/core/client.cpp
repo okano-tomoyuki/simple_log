@@ -4,10 +4,7 @@
 #include "core/hash.hpp"
 #include "core/server.hpp"
 #include "core/message.hpp"
-#include "core/client/client_proxy.hpp"
-#include "core/client/decorator.hpp"
-#include "core/client/decorator/separator_decorator.hpp"
-#include "core/client/decorator/format_decorator.hpp"
+#include "core/client_proxy.hpp"
 #include "core/client.hpp"
 
 using namespace SimpleLog;
@@ -83,19 +80,19 @@ const FormatRules& Client::default_fmt() const
     return rules_; 
 }
 
-SeparatorDecorator Client::sep(const std::string& s) const
+ClientProxy Client::sep(const std::string& s) const
 {
-    return SeparatorDecorator(*this, s);
+    return ClientProxy(*this).sep(s);
 }
 
-FormatDecorator Client::fmt(const std::string& f) const
+ClientProxy Client::fmt(const std::string& f) const
 {
-    return FormatDecorator(*this, FormatRules());
+    return ClientProxy(*this).fmt(f);
 }
 
-FormatDecorator Client::fmt(const FormatRules& rules) const
+ClientProxy Client::fmt(const FormatRules& rules) const
 {
-    return FormatDecorator(*this, rules);
+    return ClientProxy(*this).fmt(rules);
 }
 
 bool Client::push(Message&& msg) const 

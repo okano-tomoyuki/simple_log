@@ -8,9 +8,7 @@ add_library(SimpleLog
     src/core/queue.cpp
     src/core/server.cpp
     src/core/worker.cpp
-    src/core/client/client_proxy.cpp
-    src/core/client/decorator/format_decorator.cpp
-    src/core/client/decorator/separator_decorator.cpp
+    src/core/client_proxy.cpp
     src/core/client.cpp
 )
 

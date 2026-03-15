@@ -18,7 +18,7 @@ int main()
     SimpleLog::FormatRules rules;
     rules.d_fmt = "%.3f";
 
-    client.fmt(rules).info(10, 1.5, "test");
+    client.sep(" ").fmt(rules).info(10, 1.5, "test");
 
     // サーバーの停止
     server.stop();
