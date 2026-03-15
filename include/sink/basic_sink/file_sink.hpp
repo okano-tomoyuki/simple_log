@@ -19,7 +19,12 @@ public:
     {
         if (file_.is_open())
         {
-            file_ << formatter_->format(msg) << '\n';
+            const auto& tokens = formatter_->format(msg).tokens;
+            for (const auto& t : tokens)
+            {
+                file_ << t.text;
+            }
+            file_ << '\n';
         }
     }
 

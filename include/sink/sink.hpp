@@ -13,53 +13,27 @@
 namespace SimpleLog
 {
 
+class LineFormatter;
+class JsonFormatter;
+
 class Sink
 {
 public:
-    explicit Sink()
-        : min_level_(LogLevel::INFO)
-        , formatter_(std::unique_ptr<Formatter>(new Formatter()))
-    {}
+    explicit Sink();
 
-    void set_tags(const std::vector<std::string>& tags)
-    {
-        tag_hashes_ = hash64(tags);
-    }
+    Sink* set_tags(const std::vector<std::string>& tags);
 
-    void set_tag(const std::string& tag)
-    {
-        tag_hashes_ = {hash64(tag)};
-    }
+    Sink* set_tag(const std::string& tag);
 
-    void set_min_level(const LogLevel& level)
-    {
-        min_level_ = level;
-    }
+    Sink* set_min_level(const LogLevel& level);
 
-    void set_formatter(std::unique_ptr<Formatter> fmt) 
-    {
-        formatter_ = std::move(fmt);
-    }
+    Formatter* set_formatter(std::unique_ptr<Formatter> fmt);
+
+    JsonFormatter* set_json_formatter();
 
     virtual ~Sink() = default;
     
-    inline bool should_log(const Message& msg) const
-    {
-        if (msg.level < min_level_)
-        {
-            return false;
-        }
-
-        for (const auto& t : msg.tag_hashes)
-        {
-            if (std::find(tag_hashes_.begin(), tag_hashes_.end(), t) != tag_hashes_.end())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    bool should_log(const Message& msg) const;
     
     virtual void write(const Message &msg) = 0;
     virtual void flush() {}

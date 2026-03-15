@@ -10,6 +10,7 @@ add_library(SimpleLog
     src/core/worker.cpp
     src/core/client_proxy.cpp
     src/core/client.cpp
+    src/sink/sink.cpp
 )
 
 target_include_directories(SimpleLog

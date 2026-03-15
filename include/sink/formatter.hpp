@@ -1,52 +1,24 @@
-#ifndef SIMPLE_SINK_FORMATTER_HPP
-#define SIMPLE_SINK_FORMATTER_HPP
+#ifndef SIMPLELOG_FORMATTER_HPP
+#define SIMPLELOG_FORMATTER_HPP
 
 #include <string>
+#include <vector>
 #include <sstream>
 #include "core/message.hpp"
+#include "sink/semantic_token.hpp"
 
-namespace SimpleLog
+namespace SimpleLog 
 {
 
 class Formatter
 {
 public:
     virtual ~Formatter() = default;
-    virtual std::string format(const Message &msg) const
-    {
-        std::ostringstream oss;
-        oss << "["
-            << msg.thread_id
-            << "]";
 
-        switch (msg.level)
-        {
-        case LogLevel::DEBUG:
-            oss << "[DEBUG]";
-            break;
-        case LogLevel::INFO:
-            oss << "[INFO]";
-            break;
-        case LogLevel::WARN:
-            oss << "[WARN]";
-            break;
-        case LogLevel::ERROR:
-            oss << "[ERROR]";
-            break;
-        case LogLevel::FATAL:
-            oss << "[FATAL]";
-            break;
-        }
+    virtual FormatterOutput format(const Message& msg) const = 0;
 
-        for (const auto& t : msg.tokens)
-        {
-            oss << t.value << msg.separator;
-        }
-
-        return oss.str();
-    }
 };
 
 } // namespace SimpleLog
 
-#endif // SIMPLE_SINK_FORMATTER_HPP
+#endif
