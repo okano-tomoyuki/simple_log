@@ -5,14 +5,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(SimpleLog
-    core/queue.cpp
-    core/server.cpp
-    core/worker.cpp
-    core/client/client_proxy.cpp
-    core/client.cpp
+    src/core/queue.cpp
+    src/core/server.cpp
+    src/core/worker.cpp
+    src/core/client/client_proxy.cpp
+    src/core/client/decorator/format_decorator.cpp
+    src/core/client/decorator/separator_decorator.cpp
+    src/core/client.cpp
 )
 
-target_include_directories(SimpleLog 
+target_include_directories(SimpleLog
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+add_subdirectory(test)

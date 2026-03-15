@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdint>
 #include <algorithm>
+#include <iostream>
 #include "core/hash.hpp"
 #include "core/message.hpp"
 #include "sink/formatter.hpp"

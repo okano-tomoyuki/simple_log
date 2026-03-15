@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SIMPLE_LOG_CONFIG_HPP
+#define SIMPLE_LOG_CONFIG_HPP
+
 #include <chrono>
 
 namespace SimpleLog 
@@ -18,3 +20,5 @@ struct Config
 };
 
 } // namespace SimpleLog
+
+#endif // SIMPLE_LOG_CONFIG_HPP

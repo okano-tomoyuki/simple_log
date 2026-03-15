@@ -1,9 +1,9 @@
 #ifndef SIMPLE_LOG_CLIENT_PROXY_HPP
 #define SIMPLE_LOG_CLIENT_PROXY_HPP
 
-#include "core/message.hpp"
 #include <string>
 #include <chrono>
+#include "core/message.hpp"
 
 namespace SimpleLog
 {

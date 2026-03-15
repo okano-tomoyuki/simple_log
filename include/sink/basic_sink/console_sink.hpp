@@ -10,6 +10,10 @@ namespace SimpleLog
 class ConsoleSink : public Sink
 {
 public:
+    explicit ConsoleSink(const std::string& tag, std::unique_ptr<Formatter> fmt = std::make_unique<Formatter>())
+        : Sink(tag, std::move(fmt)) 
+    {}
+
     explicit ConsoleSink(const std::vector<std::string>& tags, std::unique_ptr<Formatter> fmt = std::make_unique<Formatter>())
         : Sink(tags, std::move(fmt)) 
     {}

@@ -11,18 +11,10 @@ namespace SimpleLog
 class SeparatorDecorator : public Decorator
 {
 public:
-    SeparatorDecorator(const Client &c, const std::string &sep)
-        : Decorator(c)
-        , sep_(sep) 
-    {}
+    SeparatorDecorator(const Client &c, const std::string &sep);
 
 protected:
-    ClientProxy build_proxy(LogLevel lvl) const override
-    {
-        ClientProxy p(client_, lvl);
-        p.set_separator(sep_);
-        return p;
-    }
+    ClientProxy build_proxy(LogLevel lvl) const override;
 
 private:
     std::string sep_;

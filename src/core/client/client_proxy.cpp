@@ -9,6 +9,8 @@ ClientProxy::ClientProxy(const Client &c, LogLevel lvl)
     : client_(c)
 {
     msg_.level = lvl;
+    msg_.tags = c.tags();
+    msg_.tag_hashes = c.tag_hashes();
 }
 
 ClientProxy& ClientProxy::append() 

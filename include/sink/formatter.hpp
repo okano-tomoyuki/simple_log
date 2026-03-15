@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SIMPLE_SINK_FORMATTER_HPP
+#define SIMPLE_SINK_FORMATTER_HPP
+
 #include <string>
 #include <sstream>
 #include "core/message.hpp"
@@ -38,3 +40,5 @@ public:
 };
 
 } // namespace SimpleLog
+
+#endif // SIMPLE_SINK_FORMATTER_HPP

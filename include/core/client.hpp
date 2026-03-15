@@ -34,6 +34,8 @@ public:
 
     const std::vector<std::string>& tags() const;
 
+    const std::vector<uint64_t>& tag_hashes() const;
+
     const std::string& default_sep() const;
     
     const std::string& default_fmt() const;

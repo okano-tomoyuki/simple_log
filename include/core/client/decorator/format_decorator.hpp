@@ -11,17 +11,10 @@ namespace SimpleLog
 class FormatDecorator : public Decorator 
 {
 public:
-    FormatDecorator(const Client& c, const std::string& fmt)
-        : Decorator(c), fmt_(fmt) 
-    {}
+    FormatDecorator(const Client& c, const std::string& fmt);
 
 protected:
-    ClientProxy build_proxy(LogLevel lvl) const override 
-    {
-        ClientProxy p(client_, lvl);
-        p.set_format(fmt_);
-        return p;
-    }
+    ClientProxy build_proxy(LogLevel lvl) const override;
 
 private:
     std::string fmt_;

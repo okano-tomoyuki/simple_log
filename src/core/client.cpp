@@ -63,6 +63,11 @@ const std::vector<std::string>& Client::tags() const
     return tags_; 
 }
 
+const std::vector<uint64_t>& Client::tag_hashes() const 
+{ 
+    return tag_hashes_; 
+}
+
 const std::string& Client::default_sep() const 
 { 
     return sep_; 
