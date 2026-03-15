@@ -25,19 +25,19 @@ public:
     ClientProxy& fmt(const std::string& f);
 
     template<typename... Args>
-    void info(const Args&... args)
-    {
-        Message msg;
-        append(msg, current_fmt(), args...);
-        commit(std::move(msg), LogLevel::INFO);
-    }
-
-    template<typename... Args>
     void debug(const Args&... args)
     {
         Message msg;
         append(msg, current_fmt(), args...);
         commit(std::move(msg), LogLevel::DEBUG);
+    }
+
+    template<typename... Args>
+    void info(const Args&... args)
+    {
+        Message msg;
+        append(msg, current_fmt(), args...);
+        commit(std::move(msg), LogLevel::INFO);
     }
 
     template<typename... Args>
@@ -54,6 +54,14 @@ public:
         Message msg;
         append(msg, current_fmt(), args...);
         commit(std::move(msg), LogLevel::ERROR);
+    }
+
+    template<typename... Args>
+    void fatal(const Args&... args)
+    {
+        Message msg;
+        append(msg, current_fmt(), args...);
+        commit(std::move(msg), LogLevel::FATAL);
     }
 
 private:

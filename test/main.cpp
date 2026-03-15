@@ -5,26 +5,25 @@
 int main() 
 {
     auto& server = SimpleLog::Server::global();
-    server.add_sink(std::make_unique<SimpleLog::ConsoleSink>("test"));
-    server.add_sink(std::make_unique<SimpleLog::FileSink>("test.log", "test"));
+    auto console_sink = server.add_console_sink();
+    console_sink->set_tag("test");
+    console_sink->set_min_level(SimpleLog::LogLevel::DEBUG);
+    auto file_sink = server.add_file_sink("test.log");
+    file_sink->set_tag("test");
+    file_sink->set_min_level(SimpleLog::LogLevel::FATAL);
+
     server.start();
 
     auto client = SimpleLog::Client(server, "test");
-
-    client.sep(" ").info("This", true, "an", "info", "message");
+    client.sep(" ").debug("This", true, "an", "info", "message");
     client.warn("This is a warning message");
     client.error("This is an error message");
 
     SimpleLog::FormatRules rules;
     rules.d_fmt = "%.8f";
-
     client.sep(" ").fmt(rules).info(10, 1.5, "test");
 
-    // サーバーの停止
     server.stop();
-
-    float a = 1.522333444f;
-    std::cout << a << std::endl;
 
     return 0;
 }

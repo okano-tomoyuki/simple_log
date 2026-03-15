@@ -16,20 +16,40 @@ namespace SimpleLog
 class Sink
 {
 public:
-    explicit Sink(const std::string& tag, std::unique_ptr<Formatter> fmt)
-        : tag_hashes_({hash64(tag)})
-        , formatter_(std::move(fmt))
+    explicit Sink()
+        : min_level_(LogLevel::INFO)
+        , formatter_(std::unique_ptr<Formatter>(new Formatter()))
     {}
 
-    explicit Sink(const std::vector<std::string>& tags, std::unique_ptr<Formatter> fmt)
-        : tag_hashes_(hash64(tags))
-        , formatter_(std::move(fmt))
-    {}
+    void set_tags(const std::vector<std::string>& tags)
+    {
+        tag_hashes_ = hash64(tags);
+    }
+
+    void set_tag(const std::string& tag)
+    {
+        tag_hashes_ = {hash64(tag)};
+    }
+
+    void set_min_level(const LogLevel& level)
+    {
+        min_level_ = level;
+    }
+
+    void set_formatter(std::unique_ptr<Formatter> fmt) 
+    {
+        formatter_ = std::move(fmt);
+    }
 
     virtual ~Sink() = default;
     
     inline bool should_log(const Message& msg) const
-    { 
+    {
+        if (msg.level < min_level_)
+        {
+            return false;
+        }
+
         for (const auto& t : msg.tag_hashes)
         {
             if (std::find(tag_hashes_.begin(), tag_hashes_.end(), t) != tag_hashes_.end())
@@ -37,6 +57,7 @@ public:
                 return true;
             }
         }
+
         return false;
     }
     
@@ -44,6 +65,7 @@ public:
     virtual void flush() {}
 
 protected:
+    LogLevel min_level_;
     std::unique_ptr<Formatter> formatter_;
     std::vector<uint64_t> tag_hashes_;
 };

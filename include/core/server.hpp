@@ -17,19 +17,26 @@ namespace SimpleLog
 
 using ErrorCallback = std::function<void(const std::string&)>;
 
+class ConsoleSink;
+class FileSink;
+
 class Server
 {
 public:
     explicit Server(const Config &cfg = Config{});
     ~Server();
 
+    Sink* add_sink(std::unique_ptr<Sink> sink);
+
+    ConsoleSink* add_console_sink();
+
+    FileSink* add_file_sink(const std::string& path);
+
     void start();
 
     void stop();
 
     bool push(Message &&msg);
-
-    void add_sink(std::unique_ptr<Sink> sink);
 
     void on_error(ErrorCallback cb);
 

@@ -72,6 +72,12 @@ public:
         ClientProxy(*this).error(args...);
     }
 
+    template<typename... Args>
+    void fatal(const Args&... args) const 
+    {
+        ClientProxy(*this).fatal(args...);
+    }
+
 private:
     Server* server_; 
     std::vector<std::string> tags_;

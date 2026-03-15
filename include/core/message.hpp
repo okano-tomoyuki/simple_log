@@ -12,10 +12,11 @@ namespace SimpleLog
 
 enum class LogLevel
 {
-    DEBUG,
-    INFO,
-    WARN,
-    ERROR,
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3,
+    FATAL = 4
 };
 
 enum class TokenType

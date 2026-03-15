@@ -33,6 +33,9 @@ public:
         case LogLevel::ERROR:
             oss << "[ERROR]";
             break;
+        case LogLevel::FATAL:
+            oss << "[FATAL]";
+            break;
         }
 
         for (const auto& t : msg.tokens)

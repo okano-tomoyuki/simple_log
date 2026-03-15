@@ -1,4 +1,6 @@
 #include "core/server.hpp"
+#include "sink/basic_sink/console_sink.hpp"
+#include "sink/basic_sink/file_sink.hpp"
 
 namespace SimpleLog
 {
@@ -14,6 +16,23 @@ Server::Server(const Config &cfg)
 Server::~Server()
 {
     stop();
+}
+
+Sink* Server::add_sink(std::unique_ptr<Sink> sink)
+{
+    auto raw = sink.get();
+    sinks_.push_back(std::move(sink));
+    return raw;
+}
+
+ConsoleSink* Server::add_console_sink() 
+{
+    return static_cast<ConsoleSink*>(add_sink(std::unique_ptr<ConsoleSink>(new ConsoleSink())));
+}
+
+FileSink* Server::add_file_sink(const std::string& path) 
+{
+    return static_cast<FileSink*>(add_sink(std::unique_ptr<FileSink>(new FileSink(path))));
 }
 
 void Server::start()
@@ -35,11 +54,6 @@ void Server::stop()
 bool Server::push(Message &&msg)
 {
     return queue_.push(std::move(msg));
-}
-
-void Server::add_sink(std::unique_ptr<Sink> sink)
-{
-    sinks_.push_back(std::move(sink));
 }
 
 Server &Server::global()
