@@ -17,7 +17,7 @@ Client::Client(Server& s, const std::string& tag)
     , sep_(" ")
     , tags_({tag})
     , tag_hashes_({hash64(tag)})
-    , fmt_()
+    , rules_(FormatRules())
 {}
 
 Client::Client(Server& s, const std::vector<std::string>& tags)
@@ -25,7 +25,7 @@ Client::Client(Server& s, const std::vector<std::string>& tags)
     , sep_(" ")
     , tags_(tags)
     , tag_hashes_(hash64(tags))
-    , fmt_()
+    , rules_(FormatRules())
 {}
 
 Client::Client(const Client& other)
@@ -33,7 +33,7 @@ Client::Client(const Client& other)
     , sep_(other.sep_)
     , tags_(other.tags_)
     , tag_hashes_(other.tag_hashes_)
-    , fmt_(other.fmt_)
+    , rules_(FormatRules())
 {}
 
 void Client::add_tag(const std::string& tag) 
@@ -55,7 +55,12 @@ void Client::default_sep(const std::string& sep)
 
 void Client::default_fmt(const std::string& fmt) 
 { 
-    fmt_ = fmt; 
+    rules_ = FormatRules();
+}
+
+void Client::default_fmt(const FormatRules& rules)
+{
+    rules_ = rules;
 }
 
 const std::vector<std::string>& Client::tags() const 
@@ -73,9 +78,9 @@ const std::string& Client::default_sep() const
     return sep_; 
 }
 
-const std::string& Client::default_fmt() const 
+const FormatRules& Client::default_fmt() const 
 { 
-    return fmt_; 
+    return rules_; 
 }
 
 SeparatorDecorator Client::sep(const std::string& s) const
@@ -85,7 +90,12 @@ SeparatorDecorator Client::sep(const std::string& s) const
 
 FormatDecorator Client::fmt(const std::string& f) const
 {
-    return FormatDecorator(*this, f);
+    return FormatDecorator(*this, FormatRules());
+}
+
+FormatDecorator Client::fmt(const FormatRules& rules) const
+{
+    return FormatDecorator(*this, rules);
 }
 
 bool Client::push(Message&& msg) const 

@@ -4,6 +4,7 @@
 #include <string>
 #include <chrono>
 #include <sstream>
+#include <type_traits>
 #include "core/message.hpp"
 
 namespace SimpleLog
@@ -25,29 +26,98 @@ public:
 
     ClientProxy& append();
 
-    void set_separator(const std::string &s);
+    void set_separator(const std::string& s);
     
-    void set_format(const std::string &f);
+    void set_format(const FormatRules& f);
 
     bool commit();
 
 private:
     const Client &client_;
     Message msg_;
-    std::string format_; 
+    FormatRules rules_;
 
     template <typename T>
-    ClientProxy& append_one(const T &value)
+    typename std::enable_if<!std::is_integral<T>::value && !std::is_floating_point<T>::value && !std::is_pointer<T>::value, ClientProxy&>::type
+    append_one(const T& value)
     {
         std::ostringstream oss;
         oss << value;
-        Token token;
-        token.type  = TokenType::STRING;
-        token.key   = "";
-        token.value = oss.str();
-        msg_.tokens.push_back(token);
+        Token t;
+        t.type  = TokenType::STRING;
+        t.value = oss.str();
+        msg_.tokens.push_back(std::move(t));
         return *this;
     }
+
+    template <typename T>
+    typename std::enable_if<std::is_integral<T>::value, ClientProxy&>::type
+    append_one(const T& value)
+    {
+        char buf[64];
+        std::snprintf(buf, sizeof(buf), rules_.i_fmt.c_str(), static_cast<long long>(value));
+        Token t;
+        t.type  = TokenType::INTEGER;
+        t.value = buf;
+        msg_.tokens.push_back(std::move(t));
+        return *this;
+    }
+
+    template <typename T>
+    typename std::enable_if<std::is_floating_point<T>::value, ClientProxy&>::type
+    append_one(const T& value)
+    {
+        char buf[64];
+        std::snprintf(buf, sizeof(buf), rules_.d_fmt.c_str(), static_cast<double>(value));
+        Token t;
+        t.type  = TokenType::FLOATING;
+        t.value = buf;
+        msg_.tokens.push_back(std::move(t));
+        return *this;
+    }
+
+    template <typename T>
+    typename std::enable_if<std::is_pointer<T>::value, ClientProxy&>::type
+    append_one(const T& value)
+    {
+        char buf[64];
+        std::snprintf(buf, sizeof(buf), rules_.p_fmt.c_str(), static_cast<const void*>(value));
+        Token t;
+        t.type  = TokenType::STRING;
+        t.value = buf;
+        msg_.tokens.push_back(std::move(t));
+        return *this;
+    }
+
+    ClientProxy& append_one(bool value)
+    {
+        const bool is_str = (rules_.b_fmt == "%s");
+        const std::string str = is_str ? (value ? "true" : "false") : (value ? "1" : "0");
+        Token t;
+        t.type  = is_str ? TokenType::BOOLEAN : TokenType::INTEGER;
+        t.value = str;
+        msg_.tokens.push_back(std::move(t));
+        return *this;
+    }
+
+    ClientProxy& append_one(const std::string& value)
+    {
+        Token t;
+        t.type  = TokenType::STRING;
+        t.value = value;
+        msg_.tokens.push_back(std::move(t));
+        return *this;
+    }
+
+    ClientProxy& append_one(const char* value)
+    {
+        Token t;
+        t.type  = TokenType::STRING;
+        t.value = value;
+        msg_.tokens.push_back(std::move(t));
+        return *this;
+    }
+
 
 };
 

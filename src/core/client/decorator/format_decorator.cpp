@@ -5,14 +5,14 @@
 
 using namespace SimpleLog;
 
-FormatDecorator::FormatDecorator(const Client& c, const std::string& fmt)
+FormatDecorator::FormatDecorator(const Client& c, const FormatRules& rules)
     : Decorator(c)
-    , fmt_(fmt) 
+    , rules_(rules) 
 {}
 
 ClientProxy FormatDecorator::build_proxy(LogLevel lvl) const
 {
     ClientProxy p(client_, lvl);
-    p.set_format(fmt_);
+    p.set_format(rules_);
     return p;
 }

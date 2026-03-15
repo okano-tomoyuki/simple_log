@@ -23,9 +23,9 @@ void ClientProxy::set_separator(const std::string &s)
     msg_.separator = s; 
 }
 
-void ClientProxy::set_format(const std::string &f) 
+void ClientProxy::set_format(const FormatRules& f) 
 { 
-    format_ = f; 
+    rules_ = f;
 }
 
 bool ClientProxy::commit()

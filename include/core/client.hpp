@@ -32,17 +32,21 @@ public:
     
     void default_fmt(const std::string& fmt);
 
+    void default_fmt(const FormatRules& rules);
+
     const std::vector<std::string>& tags() const;
 
     const std::vector<uint64_t>& tag_hashes() const;
 
     const std::string& default_sep() const;
     
-    const std::string& default_fmt() const;
+    const FormatRules& default_fmt() const;
 
     SeparatorDecorator sep(const std::string& s) const;
 
     FormatDecorator fmt(const std::string& f) const;
+
+    FormatDecorator fmt(const FormatRules& rules) const;
 
     bool push(Message&& msg) const;
 
@@ -83,7 +87,7 @@ private:
     std::vector<std::string> tags_;
     std::vector<uint64_t> tag_hashes_;
     std::string sep_;
-    std::string fmt_;
+    FormatRules rules_;
 };
 
 } // namespace SimpleLog
