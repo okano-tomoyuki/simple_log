@@ -16,7 +16,7 @@ int main()
     client.error("This is an error message");
 
     SimpleLog::FormatRules rules;
-    rules.d_fmt = "%.3f";
+    rules.d_fmt = "%.8f";
 
     client.sep(" ").fmt(rules).info(10, 1.5, "test");
 

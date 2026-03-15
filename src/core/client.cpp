@@ -82,17 +82,23 @@ const FormatRules& Client::default_fmt() const
 
 ClientProxy Client::sep(const std::string& s) const
 {
-    return ClientProxy(*this).sep(s);
+    ClientProxy p(*this);
+    p.sep(s);
+    return p;
 }
 
 ClientProxy Client::fmt(const std::string& f) const
 {
-    return ClientProxy(*this).fmt(f);
+    ClientProxy p(*this);
+    p.fmt(f);
+    return p;
 }
 
 ClientProxy Client::fmt(const FormatRules& rules) const
 {
-    return ClientProxy(*this).fmt(rules);
+    ClientProxy p(*this);
+    p.fmt(rules);
+    return p;
 }
 
 bool Client::push(Message&& msg) const 

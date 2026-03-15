@@ -30,7 +30,8 @@ struct FormatRules
 {
     std::string b_fmt = "%s";
     std::string c_fmt = "%d";
-    std::string i_fmt = "%d";
+    std::string i_fmt = "%lld";
+    std::string u_fmt = "%llu";
     std::string d_fmt = "%.6f";
     std::string p_fmt = "%p";
 };
