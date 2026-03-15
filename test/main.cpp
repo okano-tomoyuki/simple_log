@@ -2,30 +2,19 @@
 #include <thread>
 #include <chrono>
 
-int main() {
-    // 設定の作成
-    SimpleLog::Config config;
-
-    // サーバーの作成
-    SimpleLog::Server server(config);
-
-    // コンソールシンクの追加
-    auto console_sink = std::make_unique<SimpleLog::ConsoleSink>("test");
-    server.add_sink(std::move(console_sink));
-
-    // サーバーの開始
+int main() 
+{
+    SimpleLog::Server server;
+    server.add_sink(std::make_unique<SimpleLog::ConsoleSink>("test"));
+    server.add_sink(std::make_unique<SimpleLog::FileSink>("test.log", "test"));
     server.start();
 
-    // クライアントの作成
     SimpleLog::Client client(server, "test");
 
-    // ログメッセージの送信
-    client.info("This is an info message");
+    client.sep(" ").info("This", "is", "an", "info", "message");
     client.warn("This is a warning message");
     client.error("This is an error message");
-
-    // 少し待ってログが処理されるように
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    client.sep(",").info(10, 1.5, "test");
 
     // サーバーの停止
     server.stop();

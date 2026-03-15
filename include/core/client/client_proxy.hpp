@@ -3,6 +3,7 @@
 
 #include <string>
 #include <chrono>
+#include <sstream>
 #include "core/message.hpp"
 
 namespace SimpleLog
@@ -14,12 +15,6 @@ class ClientProxy
 {
 public:
     ClientProxy(const Client &c, LogLevel lvl);
-
-    template <typename T>
-    ClientProxy& append_one(const T &value)
-    {
-        return *this;
-    }
 
     template <typename T, typename... Remain>
     ClientProxy& append(const T &value, const Remain &...remain)
@@ -40,6 +35,20 @@ private:
     const Client &client_;
     Message msg_;
     std::string format_; 
+
+    template <typename T>
+    ClientProxy& append_one(const T &value)
+    {
+        std::ostringstream oss;
+        oss << value;
+        Token token;
+        token.type  = TokenType::STRING;
+        token.key   = "";
+        token.value = oss.str();
+        msg_.tokens.push_back(token);
+        return *this;
+    }
+
 };
 
 } // namespace SimpleLog

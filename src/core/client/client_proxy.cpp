@@ -30,5 +30,6 @@ void ClientProxy::set_format(const std::string &f)
 
 bool ClientProxy::commit()
 {
+    msg_.thread_id = std::this_thread::get_id();
     return client_.push(std::move(msg_));
 }

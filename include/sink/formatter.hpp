@@ -16,23 +16,28 @@ public:
     {
         std::ostringstream oss;
         oss << "["
-            << std::this_thread::get_id()
-            << "] ";
+            << msg.thread_id
+            << "]";
 
         switch (msg.level)
         {
         case LogLevel::DEBUG:
-            oss << "DEBUG";
+            oss << "[DEBUG]";
             break;
         case LogLevel::INFO:
-            oss << "INFO";
+            oss << "[INFO]";
             break;
         case LogLevel::WARN:
-            oss << "WARN";
+            oss << "[WARN]";
             break;
         case LogLevel::ERROR:
-            oss << "ERROR";
+            oss << "[ERROR]";
             break;
+        }
+
+        for (const auto& t : msg.tokens)
+        {
+            oss << t.value << msg.separator;
         }
 
         return oss.str();

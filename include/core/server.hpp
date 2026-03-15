@@ -20,7 +20,7 @@ using ErrorCallback = std::function<void(const std::string&)>;
 class Server
 {
 public:
-    explicit Server(const Config &cfg);
+    explicit Server(const Config &cfg = Config{});
     ~Server();
 
     void start();
